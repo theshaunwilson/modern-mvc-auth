@@ -1,15 +1,15 @@
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('../models/Users');
+const User = require('../models/User');
 
 function initialize(passport) {
   // Tell passport how to handle login attempts
   passport.use(
     new LocalStrategy(
       { usernameField: 'email' },
-      async (isEmail, isStrongPassword, done) => {
+      async (email, password, done) => {
         try {
           // Look for user by email
-          const user = await User.findOne({ email: email.toLocalCase() });
+          const user = await User.findOne({ email: email.toLowerCase() });
 
           // If no user found, return error message
           if (!user) {
@@ -35,7 +35,7 @@ function initialize(passport) {
 
   // Tell passport how to store user in the session
   passport.serializeUser((user, done) => {
-    done(null, user.ud);
+    done(null, user.id);
   });
 
   // Tell passport how to get user from session

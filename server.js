@@ -22,6 +22,9 @@ const connectDB = require('./config/database');
 // Import the passport configuration we created
 const initializePassport = require('./config/passport-config');
 
+// Import our auth routes
+const authRoutes = require('./routes/auth');
+
 // Load environment variables from .env file
 require('dotenv').config();
 
@@ -45,35 +48,35 @@ app.use(
   })
 );
 
+// Passport setup
 // Set up passport with our configuration
 initializePassport(passport);
-
 // Initialize passport middleware
 app.use(passport.initialize());
 
+// Middleware
 // Allow passport to use sessions
 app.use(passport.session());
-
 // Use morgan for logging HTTP requests
 app.use(morgan('dev'));
-
 // Parse JSON bodies (for API requests)
 app.use(express.json());
-
 // Parse URL-encoded bodies (for form submissions)
 app.use(express.urlencoded({ extended: true }));
-
 // Serve static files from 'public' directory
 app.use(express.static('public'));
 
-// Test route to verify server is working
+// Connect auth routes - all auth routes with start with /auth
+app.use('/auth', authRoutes);
+
+// Home Route
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Todo API!' });
 });
 
+// Server
 // Define port for server to listen on (use environment variable or default to 3000)
 const PORT = process.env.PORT || 3000;
-
 // Start server and listen for requests
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
