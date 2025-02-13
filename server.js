@@ -25,6 +25,9 @@ const initializePassport = require('./config/passport-config');
 // Import our auth routes
 const authRoutes = require('./routes/auth');
 
+// Import todo routes
+const todoRoutes = require('./routes/todos');
+
 // Load environment variables from .env file
 require('dotenv').config();
 
@@ -68,6 +71,9 @@ app.use(express.static('public'));
 
 // Connect auth routes - all auth routes with start with /auth
 app.use('/auth', authRoutes);
+
+// Connect todo routes - all todo routes will start with /todos
+app.use('/todos', todoRoutes);
 
 // Home Route
 app.get('/', (req, res) => {
