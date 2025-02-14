@@ -13,6 +13,9 @@ const session = require('express-session');
 // Import connect-mongo - stores our sessions in MongoDB instead of memory
 const MongoStore = require('connect-mongo');
 
+// Import CORS for cross-origin requests
+const cors = require('cors');
+
 // Import morgan - logs HTTP requests for debugging
 const morgan = require('morgan');
 
@@ -36,6 +39,14 @@ const app = express();
 
 // Connect to our MongoDB database
 connectDB();
+
+// Enable CORS - this is like giving specific buildings permission to talk to our building
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // Allow our React app to connect
+    credentials: true, // Allow cookies to be sent with requests
+  })
+);
 
 // Set up session middleware - this manages user login state
 app.use(
