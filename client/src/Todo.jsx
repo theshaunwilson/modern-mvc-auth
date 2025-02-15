@@ -102,38 +102,46 @@ const Todo = () => {
         {todos.map((todo) => (
           <li key={todo._id}>
             {editingTodoId === todo._id ? (
-              <input
-                type="text"
-                value={editingText}
-                onChange={(e) => setEditingText(e.target.value)}
-                onBlur={() => handleEditTodo(todo._id)}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    handleEditTodo(todo._id);
-                  }
-                }}
-                autoFocus
-              />
+              <>
+                <input
+                  type="text"
+                  value={editingText}
+                  onChange={(e) => setEditingText(e.target.value)}
+                  autoFocus
+                />
+                <button onClick={() => handleEditTodo(todo._id)}>Save</button>
+                <button
+                  onClick={() => {
+                    setEditingTodoId(null); // Cancel edit mode
+                  }}
+                >
+                  Cancel
+                </button>
+              </>
             ) : (
-              <span
-                style={{
-                  textDecoration: todo.completed ? 'line-through' : 'none',
-                  cursor: 'pointer',
-                }}
-                onClick={() => handleToggleComplete(todo._id)}
-              >
-                {todo.title}
-              </span>
+              <>
+                <span
+                  style={{
+                    textDecoration: todo.completed ? 'line-through' : 'none',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => handleToggleComplete(todo._id)}
+                >
+                  {todo.title}
+                </span>
+                <button onClick={() => handleDeleteTodo(todo._id)}>
+                  Delete
+                </button>
+                <button
+                  onClick={() => {
+                    setEditingTodoId(todo._id); // Enter edit mode
+                    setEditingText(todo.title); // Set the current todo title
+                  }}
+                >
+                  Edit
+                </button>
+              </>
             )}
-            <button onClick={() => handleDeleteTodo(todo._id)}>Delete</button>
-            <button
-              onClick={() => {
-                setEditingTodoId(todo._id);
-                setEditingText(todo.title);
-              }}
-            >
-              Edit
-            </button>
           </li>
         ))}
       </ul>
