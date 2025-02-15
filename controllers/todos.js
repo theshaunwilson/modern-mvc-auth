@@ -43,23 +43,30 @@ const todoController = {
   // Toggle todo completion status
   toggleComplete: async (req, res) => {
     try {
-      // Find the specific todo by ID
       const todo = await Todo.findById(req.params.id);
-
-      // If todo doesn't exist, return error
       if (!todo) {
         return res.status(404).json({ error: 'Todo not found' });
       }
-
-      // Make sure todo belongs to current user
-      if (todo.user.toString() !== req.user.id) {
-        return res.status(403).json({ error: 'Not authorized' });
-      }
-
-      // Toggle the completed status
-      todo.completed = !todo.completed;
+      todo.completed = !todo.completed; // Toggle the completed status
       await todo.save();
+      res.json(todo);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
 
+  // Update Todo
+  updateTodo: async (req, res) => {
+    try {
+      const { title } = req.body;
+      const todo = await Todo.findByIdAndUpdate(
+        req.params.id,
+        { title },
+        { new: true } // Return the updated todo
+      );
+      if (!todo) {
+        return res.status(404).json({ error: 'Todo not found' });
+      }
       res.json(todo);
     } catch (err) {
       res.status(500).json({ error: err.message });

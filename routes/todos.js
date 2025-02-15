@@ -22,6 +22,9 @@ router.post('/create', todoController.createTodo);
 // Toggle todo completion status
 router.put('/:id/toggle', todoController.toggleComplete);
 
+// Edit a Todo
+router.put('/:id', todoController.updateTodo);
+
 // Delete a todo
 router.delete('/:id', todoController.deleteTodo);
 
